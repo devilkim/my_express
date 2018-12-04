@@ -1,21 +1,24 @@
 'use strict';
 
 const result = require('../result');
-const httpStatus = {};
+const httpStatus = require('../http-status');
 const Success = result.success;
 
 const printErrorParameter = req => {
-  console.info("### Error API Parameters List ###");
-  if (req.tong !== undefined) console.info("token: " + JSON.stringify(req.tong));
-  if (Object.keys(req.params).length !== 0) console.info("params: " + JSON.stringify(req.params));
-  if (Object.keys(req.body).length !== 0) console.info("body: " + JSON.stringify(req.body));
-  if (Object.keys(req.query).length !== 0) console.info("query: " + JSON.stringify(req.query));
+  console.info('### Error API Parameters List ###');
+  if (req.tong !== undefined) console.info('token: ' + JSON.stringify(req.tong));
+  if (Object.keys(req.params).length !== 0) console.info('params: ' + JSON.stringify(req.params));
+  if (Object.keys(req.body).length !== 0) console.info('body: ' + JSON.stringify(req.body));
+  if (Object.keys(req.query).length !== 0) console.info('query: ' + JSON.stringify(req.query));
 };
 
 const available = (is_available, alert) => {
   return (req, res, next) => {
     if (is_available) next();
-    else res.status(httpStatus.serviceUnavailable).send({"code": httpStatus.serviceUnavailable, "message": alert, "custom": true});
+    else
+      res
+        .status(httpStatus.serviceUnavailable)
+        .send({code: httpStatus.serviceUnavailable, message: alert, custom: true});
   };
 };
 
