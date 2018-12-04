@@ -1,12 +1,13 @@
 'use strict';
 
-const result = {error: {}, success: {}};
-const config = require('../constant/http-status');
+/** @member {Array} */
+const httpStatusConfig = require('../constant/http-status');
+/** @member {Object} */
 const httpStatus = require('./http-status');
+const result = {error: {}, success: {}};
 
 // utils
 const Success = function() {};
-
 result.success = Success;
 
 const customSuccess = (code, object) => {
@@ -26,16 +27,21 @@ const customError = (code, status, message) => {
   return err;
 };
 
-config
+httpStatusConfig
   .filter(item => httpStatus.is2xx(item.code))
   .map(item => {
-    result.success[item.name] = (object = null) => customSuccess(item.code, object);
+    result.success[item.name] = (object = null) =>
+      customSuccess(item.code, object);
   });
-config
+httpStatusConfig
   .filter(item => httpStatus.is4xx(item.code) || httpStatus.is5xx(item.code))
   .map(item => {
     result.error[item.name] = message =>
-      customError(item.code, item.name, message === undefined ? item.defaultMessage : message);
+      customError(
+        item.code,
+        item.name,
+        message === undefined ? item.defaultMessage : message
+      );
   });
 
 module.exports = result;

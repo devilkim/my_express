@@ -1,7 +1,6 @@
 'use strict';
 
 const {success, error} = require('../core/result');
-const condition = require('../core/condition');
 const jsonWebToken = require('../core/json-web-token');
 const itemManager = require('../custom_modules/ItemManager');
 
@@ -11,7 +10,7 @@ const controller = {
 
     const isSuccess = itemManager.addItem(name);
 
-    return success.ok({isSuccess: true});
+    return success.ok({isSuccess});
   },
 
   async editItem({query, body}) {
@@ -45,11 +44,11 @@ const controller = {
     return success.ok({isSuccess});
   },
 
-  async error403({query}) {
+  async error403() {
     return error.forbidden();
   },
 
-  async error500({query}) {
+  async error500() {
     adsaff.eee;
 
     return success.ok({});
@@ -58,7 +57,7 @@ const controller = {
   async createToken() {
     const token = jsonWebToken.encrypt({
       member_no: 12392812,
-      user_id: 'devilkim36'
+      user_id: 'devilkim36',
     });
 
     return success.ok({token});
@@ -69,7 +68,7 @@ const controller = {
     const tokenInfo = jsonWebToken.decrypt(authorization);
 
     return success.ok({tokenInfo});
-  }
+  },
 };
 
 module.exports = controller;

@@ -1,12 +1,13 @@
 'use strict';
 const express = require('express');
-const router = express.Router();
 const {api} = require('../core/route-utils');
 const app = require('../controllers/app');
+/** @member {Object} */
+const router = express.Router();
 
 ///doc start
-router.get('/item', api(app.geItem));
-router.get('/items', api(app.geItems));
+router.get('/item', api(app.getItem));
+router.get('/items', api(app.getItems));
 router.post('/item', api(app.addItem));
 router.put('/item', api(app.editItem));
 router.delete('/item', api(app.removeItem));
