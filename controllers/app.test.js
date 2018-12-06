@@ -1,22 +1,28 @@
 const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
 const expect = chai.expect;
-chai.use(chaiHttp);
-
-const test = ()
+const app = require('./app');
+const {createParameter} = require('../core/param');
 
 describe('/controllers/app.js', () => {
-  describe('ping', () => {
-    it('200', done => {
-      chai
-        .request(app)
-        .get('/app/item')
-        .end((err, res) => {
-          expect(err).is.null;
-          expect(res).have.status(200);
-          done();
-        });
+  const req = {};
+
+  before(() => {
+    req.headers = {};
+    req.body = {};
+    req.query = {};
+    req.params = {};
+  });
+  describe('get /app/item', () => {
+    it('400(No parameter)', done => {
+      app.addItem(createParameter(req)).catch((err, res) => {
+        console.log('#####');
+        console.log(err);
+        console.log('#####');
+        console.log(res);
+        console.log('#####');
+        expect(err).is.null;
+        done();
+      });
     });
   });
 });

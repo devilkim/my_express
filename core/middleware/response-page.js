@@ -1,58 +1,41 @@
 'use strict';
 
-const result = require('../result');
-const httpStatus = require('../http-status');
-const Success = result.success;
-
-const printErrorParameter = req => {
-  console.info('### Error API Parameters List ###');
-  if (req.tong !== undefined)
-    console.info('token: ' + JSON.stringify(req.tong));
-  if (Object.keys(req.params).length !== 0)
-    console.info('params: ' + JSON.stringify(req.params));
-  if (Object.keys(req.body).length !== 0)
-    console.info('body: ' + JSON.stringify(req.body));
-  if (Object.keys(req.query).length !== 0)
-    console.info('query: ' + JSON.stringify(req.query));
-};
+const httpStatus = require('http-status');
+const {result} = require('../res-utils');
 
 const available = (is_available, alert) => {
   return (req, res, next) => {
     if (is_available) next();
     else
-      res
-        .status(httpStatus.serviceUnavailable)
-        .send({
-          code: httpStatus.serviceUnavailable,
-          message: alert,
-          custom: true,
-        });
+      responseJSON(res, httpStatus.serviceUnavailable, {
+        code: httpStatus.SERVICE_UNAVAILABLE,
+        message: alert,
+      });
   };
 };
-
+const responseJSON = (res, statusCode, obj) => {
+  res.status(statusCode).send(obj);
+};
 const json = {
   notFound(req, res, next) {
-    next(result.error.notFound());
+    next(result.error(httpStatus.NOT_FOUND, 'API가 존재하지 않습니다.'));
   },
   async result(data, req, res, next) {
-    if (data instanceof Success) {
-      res.status(data.code).send(data.object);
-    } else {
-      let code, message, custom, description;
-      if (data instanceof Error) {
-        code = data.code || httpStatus.internalServerError;
-        custom = data.custom || false;
-        message = data.message;
-        description = data.stack;
-      } else {
-        code = httpStatus.internalServerError;
-        message = data + '';
-        custom = false;
-        description = data + '';
-      }
-      if (!Number.isInteger(code)) code = httpStatus.internalServerError;
-      res.status(code).send({code, message, custom});
+    let resultHttpStatus = data.httpStatus;
+    let resultObject = data.resultObject || {};
+    if (data instanceof Error) {
+      resultHttpStatus = httpStatus.INTERNAL_SERVER_ERROR;
+      resultObject.message = 'Unexpected error.';
+      console.log(data);
+    } else if (
+      data.httpStatus === undefined ||
+      !Number.isInteger(data.httpStatus) ||
+      httpStatus[data.httpStatus] === undefined
+    ) {
+      resultHttpStatus = httpStatus.INTERNAL_SERVER_ERROR;
+      resultObject.message = 'Unexpected error.';
     }
+    responseJSON(res, resultHttpStatus, resultObject);
   },
 };
 

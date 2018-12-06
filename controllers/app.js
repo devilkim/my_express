@@ -1,6 +1,7 @@
 'use strict';
 
-const {success, error} = require('../core/result');
+const httpStatus = require('http-status');
+const {result} = require('../core/res-utils');
 const jsonWebToken = require('../core/json-web-token');
 const itemManager = require('../custom_modules/ItemManager');
 
@@ -10,21 +11,7 @@ const controller = {
 
     const isSuccess = itemManager.addItem(name);
 
-    return success.ok({isSuccess});
-  },
-
-  async getItem({query}) {
-    const no = query('no');
-
-    const item = itemManager.getItem(parseInt(no, 10));
-
-    return success.ok({item});
-  },
-
-  async getItems() {
-    const items = itemManager.getItems();
-
-    return success.ok({items});
+    return result(httpStatus.OK).object({isSuccess});
   },
 
   async editItem({query, body}) {
@@ -33,7 +20,20 @@ const controller = {
 
     const isSuccess = itemManager.editItem(parseInt(no, 10), name);
 
-    return success.ok({isSuccess});
+    return result(httpStatus.OK).object({isSuccess});
+  },
+  async getItem({query}) {
+    const no = query('no');
+
+    const item = itemManager.getItem(parseInt(no, 10));
+
+    return result(httpStatus.OK).object({item});
+  },
+
+  async getItems() {
+    const items = itemManager.getItems();
+
+    return result(httpStatus.OK).object({items});
   },
 
   async removeItem({query}) {
@@ -41,17 +41,17 @@ const controller = {
 
     const isSuccess = itemManager.removeItem(parseInt(no, 10));
 
-    return success.ok({isSuccess});
+    return result(httpStatus.OK).object({isSuccess});
   },
 
   async error403() {
-    return error.forbidden();
+    return result(httpStatus.FORBIDDEN).message();
   },
 
   async error500() {
     adsaff.eee;
 
-    return success.ok({});
+    return result(httpStatus.OK).object();
   },
 
   async createToken() {
@@ -60,14 +60,14 @@ const controller = {
       user_id: 'devilkim36',
     });
 
-    return success.ok({token});
+    return result(httpStatus.OK).object({token});
   },
 
   async token({headers}) {
     const authorization = headers('authorization');
     const tokenInfo = jsonWebToken.decrypt(authorization);
 
-    return success.ok({tokenInfo});
+    return result(httpStatus.OK).object({tokenInfo});
   },
 };
 

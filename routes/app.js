@@ -1,8 +1,7 @@
 'use strict';
 const express = require('express');
-const {api} = require('../core/route-utils');
+const {api} = require('../core/req-utils');
 const app = require('../controllers/app');
-/** @member {Object} */
 const router = express.Router();
 
 ///doc start
