@@ -13,15 +13,6 @@ const controller = {
     return success.ok({isSuccess});
   },
 
-  async editItem({query, body}) {
-    const no = query('no');
-    const name = body('name');
-
-    const isSuccess = itemManager.editItem(parseInt(no, 10), name);
-
-    return success.ok({isSuccess});
-  },
-
   async getItem({query}) {
     const no = query('no');
 
@@ -34,6 +25,15 @@ const controller = {
     const items = itemManager.getItems();
 
     return success.ok({items});
+  },
+
+  async editItem({query, body}) {
+    const no = query('no');
+    const name = body('name');
+
+    const isSuccess = itemManager.editItem(parseInt(no, 10), name);
+
+    return success.ok({isSuccess});
   },
 
   async removeItem({query}) {

@@ -16,7 +16,8 @@
     "indent": ["error", 2],
     "object-curly-spacing": ["error", "never"],
     "no-console": "off",
-    "import/newline-after-import": ["error", "never"]
+    "import/newline-after-import": ["error", "never"],
+    "newline-per-chained-call": ["off"]
   },
   "globals": {
 

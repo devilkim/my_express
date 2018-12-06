@@ -1,12 +1,6 @@
 class ItemManager {
   constructor() {
     this.items = [];
-    this.createSampleData();
-  }
-  createSampleData() {
-    this.items.push({no: this.items.length + 1, name: 'one', isEnabled: true});
-    this.items.push({no: this.items.length + 1, name: 'two', isEnabled: true});
-    this.items.push({no: this.items.length + 1, name: 'three', isEnabled: true});
   }
   getItem(no) {
     const target = this.items.filter(item => item.no === no && item.isEnabled);
