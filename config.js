@@ -14,5 +14,5 @@ module.exports = {
     morgan:
       ':date[iso] :status :method :url :response-time ms :res[content-length] bytes',
     resultType: 'json', // json
-  },
+  }
 };
